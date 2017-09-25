@@ -1,0 +1,17 @@
+#!/usr/bin/expect
+set sys_ip [lindex $argv 0];
+set sys_user [lindex $argv 1];
+set sys_pass [lindex $argv 2]; 
+spawn ssh -l $sys_user $sys_ip 
+expect {
+    "yes/no" {
+        send "yes\r"
+        exp_continue
+    }
+    "assword:" {
+        send "$sys_pass\r"
+        exp_continue
+    }
+}
+#expect ":~#"
+interact

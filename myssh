@@ -1,0 +1,29 @@
+#!/bin/bash
+if [ "$#" -lt 1 ] 
+then
+	echo "Usage : myssh <Host Name>"
+	exit
+fi
+
+cmd="grep ^$1 mysystem.ini"
+sys_info=`$cmd`
+if [ -n $sys_info ]
+then
+	sys_ip="$(cut -d':' -f2 <<< $sys_info)"
+	user_name="$(cut -d':' -f3 <<< $sys_info)"
+	user_password="$(cut -d':' -f4 <<< $sys_info)"
+fi
+if [ -z $sys_ip ]
+then
+	echo "IP mising in init file"
+	exit
+fi
+if [ -n $user_name ]
+then
+	user_name="root"
+fi
+if [ -n $user_password ]
+then
+	user_password="passw0rd"
+fi
+myssh.exp $sys_ip $user_name $user_password
